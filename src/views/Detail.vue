@@ -21,7 +21,7 @@
             <p class="text">{{ comment.content }}</p>
           </div>
         </div>
-        <!-- コメント送信 -->
+        <!-- シェアに対するコメント送信 -->
         <input v-model="content" type="text" />
         <div @click="send">
           <button>コメント</button>
@@ -34,14 +34,44 @@
 <script>
 import SideNavi from "../components/SideNavi";
 import Message from "../components/Message";
-
+import axios from "axios";
 export default {
   props: ["id"],
   data() {
     return {
       content: "",
-      data: [{ name: "太郎", like: [], share: "初めまして" }],
+      data: "",
     };
+  },
+  methods: {
+    send() {
+      axios
+        //シェアに対するコメント送信
+        .post("https://aqueous-tor-62904.herokuapp.com/api/comment", {
+          share_id: this.id,
+          user_id: this.$store.state.user.id,
+          content: this.content,
+        })
+        .then((response) => {
+          console.log(response);
+          this.content = "";
+          this.$router.go({
+            path: this.$router.currentRoute.path,
+            force: true,
+          });
+        });
+    },
+    //画面表示時にコメント表示
+    comment() {
+      axios
+        .get("https://aqueous-tor-62904.herokuapp.com/api/shares/" + this.id)
+        .then((response) => {
+          this.data = response.data.comment;
+        });
+    },
+  },
+  created() {
+    this.comment();
   },
   components: {
     SideNavi,

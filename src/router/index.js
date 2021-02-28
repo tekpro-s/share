@@ -5,8 +5,9 @@ import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Profile from '../views/Profile.vue'
 import Detail from "../views/Detail.vue";
+import store from "../store/index";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -39,6 +40,23 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
+
+// 認証設定
+router.beforeEach((to, from, next) => {
+  if (
+    to.matched((record) => record.meta.requiresAuth) && 
+      !store.state.auth
+    ) {
+      next({
+        path: "/",
+        query: {
+          redirect: to.fullPath.Path,
+        },
+      });
+  } else {
+    next();
+  }
+});
 
 export default router

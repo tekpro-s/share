@@ -15,8 +15,23 @@
 <script>
 import HeaderAuth from "../components/HeaderAuth";
 export default {
+  data() {
+    return {
+      email: "",
+      passwword: "",
+    };
+  },
   components: {
     HeaderAuth,
+  },
+  // ログイン時に値を渡す
+  methods: {
+    auth() {
+      this.$store.dispatch("login", {
+        email: this.email,
+        passwword: this.passwword,
+      });
+    },
   },
 };
 </script>

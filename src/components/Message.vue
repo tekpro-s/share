@@ -1,26 +1,148 @@
 <template>
   <div>
+    <!-- シェアを全て表示する -->
     <div v-for="(value, index) in shares" :key="index">
       <div class="message">
         <div class="flex">
           <p class="name">{{ value.name }}</p>
-          <img class="icon" src="../assets/heart.png" />
+          <!-- いいねボタン -->
+          <img class="icon" src="../assets/heart.png" @click="fav(index)" alt />
           <p class="number">{{ value.like.length }}</p>
-          <img class="icon" src="../assets/cross.png" />
-          <img class="icon detail" src="../assets/detail.png" />
+          <!-- シェア削除 -->
+          <img
+            class="icon"
+            src="../assets/cross.png"
+            @click="del(index)"
+            alt
+            v-if="path && profile"
+          />
+          <!-- シェア詳細画面 -->
+          <img
+            class="icon detail"
+            src="../assets/detail.png"
+            @click="
+              $router.push({
+                path: '/detail/' + value.item.id,
+                params: { id: value.ite.id },
+              })
+            "
+            alt
+            v-if="profile"
+          />
         </div>
-        <p class="text">{{ value.share }}</p>
+        <p class="text">{{ value.item.share }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  props: ["id"],
   data() {
     return {
-      shares: [{ name: "太郎", like: [], share: "初めまして" }],
+      shares: [],
+      path: true,
+      profile: true,
     };
+  },
+  methods: {
+    fav(index) {
+      // 対象のシェアにいいねがついているか
+      const result = this.shares[index].like.some((value) => {
+        return value.user_id == this.$store.state.user.id;
+      });
+      // 自分がすでにいいねしている場合
+      if (result) {
+        // 自分がすでにいいねしている場合、自分のいいねを削除する
+        this.shares[index].like.forEach((element) => {
+          if (element.user_id == this.$store.state.user.id) {
+            axios({
+              method: "delete",
+              url: "https://aqueous-tor-62904.herokuapp.com/api/like",
+              data: {
+                share_id: this.shares[index].item.id,
+                user_id: this.$store.state.user.id,
+              },
+            }).then((response) => {
+              console.log(response);
+              this.$router.go({
+                path: this.$router.currentRoute.path,
+                force: true,
+              });
+            });
+          }
+        });
+        // 自分がすでにいいねしていない場合
+      } else {
+        axios
+          .post("https://aqueous-tor-62904.herokuapp.com/api/like", {
+            share_id: this.shares[index].item.id,
+            user_id: this.$store.state.user.id,
+          })
+          .then((response) => {
+            console.log(response);
+            this.$router.go({
+              path: this.$router.currentRoute.path,
+              force: true,
+            });
+          });
+      }
+    },
+    // シェア削除
+    del(index) {
+      axios
+        .delete(
+          "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
+            this.shares[index].item.id
+        )
+        .then((response) => {
+          console.log(response);
+          this.$router.go({
+            path: this.$router.currentRoute.path,
+            force: true,
+          });
+        });
+    },
+    // 画面表示時のシェア表示
+    async getShares() {
+      let data = [];
+      const shares = await axios.get(
+        "https://aqueous-tor-62904.herokuapp.com/api/shares/"
+      );
+      for (let i = 0; i < shares.data.data.length; i++) {
+        await axios
+          .get(
+            "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
+              shares.data.data[i].id
+          )
+          .then((response) => {
+            if (this.$route.name == "profile") {
+              if (response.data.item.user_id == this.$store.state.user.id) {
+                data.push(response.data);
+              }
+            } else if (this.$route.name == "detail") {
+              if (response.data.item.id == this.id) {
+                data.push(response.data);
+              }
+            } else {
+              data.push(response.data);
+            }
+          });
+      }
+      this.shares = data;
+      console.log(this.shares);
+    },
+  },
+  created() {
+    if (this.$route.name === "home") {
+      this.path = false;
+    }
+    if (this.$route.name === "detail") {
+      this.profile = false;
+    }
+    this.getShares();
   },
 };
 </script>

@@ -28,10 +28,30 @@ import Message from "../components/Message";
 export default {
   data() {
     return {
+      // ログイン中のユーザ名とプロフィール表示い
       active: true,
-      name: "太郎",
-      profile: "私は太郎です",
+      name: this.$store.state.user.name,
+      profile: this.$store.state.user.profile,
     };
+  },
+  methods: {
+    // プロフィール更新
+    edit() {
+      if (!this.active) {
+        axios
+          .put("https://aqueous-tor-62904.herokuapp.com/api/user", {
+            email: this.$store.state.user.email,
+            profile: this.profile,
+          })
+          .then((response) => {
+            this.$store.dispatch("changeUserData", {
+              profile: this.profile,
+            });
+            console.log(response);
+          });
+      }
+      this.active = !this.active;
+    },
   },
   components: {
     SideNavi,

@@ -16,9 +16,37 @@
 
 <script>
 import HeaderAuth from "../components/HeaderAuth";
+import axios from "axios";
 export default {
-  comments: {
+  data() {
+    return {
+      name: "",
+      profile: "",
+      email: "",
+      password: "",
+    };
+  },
+  components: {
     HeaderAuth,
+  },
+  methods: {
+    // 新規登録APIに値を渡す
+    auth() {
+      axios
+        .post("https://aqueous-tor-62904.herokuapp.com/api/register", {
+          name: this.name,
+          profile: this.profile,
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          console.log(response);
+          this.$router.replace("/");
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
   },
 };
 </script>
