@@ -29,7 +29,7 @@ export default {
     auth() {
       this.$store.dispatch("login", {
         email: this.email,
-        passwword: this.passwword,
+        password: this.password,
       });
     },
   },
