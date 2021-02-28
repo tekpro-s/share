@@ -25,6 +25,7 @@
 <script>
 import SideNavi from "../components/SideNavi";
 import Message from "../components/Message";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -39,7 +40,7 @@ export default {
     edit() {
       if (!this.active) {
         axios
-          .put("https://aqueous-tor-62904.herokuapp.com/api/user", {
+          .put("herokuのURL/api/user", {
             email: this.$store.state.user.email,
             profile: this.profile,
           })

@@ -47,7 +47,7 @@ export default new Vuex.Store({
       commit("user", responseUser.data.data[0]);
       router.replace("/home");
     },
-    login({ commit }) {
+    logout({ commit }) {
       axios
         .post("https://aqueous-tor-62904.herokuapp.com/api/logout", {
           auth: this.state.auth,
