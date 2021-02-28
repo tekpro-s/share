@@ -23,7 +23,7 @@
             @click="
               $router.push({
                 path: '/detail/' + value.item.id,
-                params: { id: value.ite.id },
+                params: { id: value.item.id },
               })
             "
             alt
