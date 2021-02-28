@@ -99,7 +99,7 @@ export default {
     async getShares() {
       let data = [];
       const shares = await axios.get(
-        "https://aqueous-tor-62904.herokuapp.com/api/shares/"
+        "https://aqueous-tor-62904.herokuapp.com/api/shares"
       );
       for (let i = 0; i < shares.data.data.length; i++) {
         await axios

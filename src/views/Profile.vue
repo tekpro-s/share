@@ -29,7 +29,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      // ログイン中のユーザ名とプロフィール表示い
+      // ログイン中のユーザ名とプロフィール表示
       active: true,
       name: this.$store.state.user.name,
       profile: this.$store.state.user.profile,
@@ -40,7 +40,7 @@ export default {
     edit() {
       if (!this.active) {
         axios
-          .put("herokuのURL/api/user", {
+          .put("https://aqueous-tor-62904.herokuapp.com/api/user", {
             email: this.$store.state.user.email,
             profile: this.profile,
           })
