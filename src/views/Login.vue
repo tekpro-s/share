@@ -6,7 +6,7 @@
       <div class="form">
         <input placeholder="メールアドレス" type="email" v-model="email" />
         <input placeholder="パスワード" type="password" v-model="password" />
-        <button>ログイン</button>
+        <button @click="auth">ログイン</button>
       </div>
     </div>
   </div>
@@ -24,7 +24,7 @@ export default {
   components: {
     HeaderAuth,
   },
-  // ログイン時に値を渡す
+  // ログイン時にVuexのactionsに値を渡す
   methods: {
     auth() {
       this.$store.dispatch("login", {
