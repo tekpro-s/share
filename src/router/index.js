@@ -1,72 +1,68 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import Home from "../views/Home.vue"
-import Login from "../views/Login.vue"
-import SignUp from "../views/SignUp.vue"
-import Profile from "../views/Profile.vue"
-import Detail from "../views/Detail.vue";
-import store from "../store/index";
+import Vue from "vue";
+import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+import axios from "axios";
+import router from "../router/index";
 
-Vue.use(VueRouter);
+Vue.use(Vuex);
 
-const routes = [
-  {
-    path: "/",
-    name: "login",
-    component: Login
-  }, {
-    path: "/signup",
-    name: "signup",
-    component: SignUp
+export default new Vuex.Store({
+  plugins: [createPersistedState()],
+  state: {
+    auth: "",
+    user: "",
   },
-  {
-    path: "/home",
-    name: "Home",
-    component: Home,
-    meta: {
-      requiresAuth: true,
+  mutations: {
+    auth(state, payload) {
+      state.auth = payload;
+    },
+    user(state, payload) {
+      state.user = payload;
+    },
+    logout(state, payload) {
+      state.auth = payload;
+    },
+    changeUserData(state, payload) {
+      state.user.profile = payload;
     },
   },
-  {
-    path: "/detail/:id",
-    name: "detail",
-    component: Detail,
-    meta: {
-      requiresAuth: true,
+  actions: {
+    async login({ commit }, { email, password }) {
+      const responseLogin = await axios.post(
+        "herokuのURL/api/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      const responseUser = await axios.get(
+        "herokuのURL/api/user",
+        {
+          params: {
+            email: email,
+          },
+        }
+      );
+      commit("auth", responseLogin.data.auth);
+      commit("user", responseUser.data.data[0]);
+      router.replace("/home");
     },
-    props: true,
+    logout({ commit }) {
+      axios
+        .post("herokuのURL/api/logout", {
+          auth: this.state.auth,
+        })
+        .then((response) => {
+          console.log(response);
+          commit("logout", response.data.auth);
+          router.replace("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeUserData({ commit }, { profile }) {
+      commit("changeUserData", profile);
+    },
   },
-  {
-    path: "/profile",
-    name: "profile",
-    component: Profile,
-    meta: {
-      requiresAuth: true,
-    },
-  }
-]
-
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes
 });
-
-// 認証設定
-router.beforeEach((to, from, next) => {
-  if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.state.auth
-  ) {
-    next({
-      path: "/",
-      query: {
-        redirect: to.fullPath,
-      },
-    });
-  } else {
-    next();
-  }
-});
-
-export default router;
