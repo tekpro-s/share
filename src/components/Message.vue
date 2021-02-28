@@ -53,7 +53,7 @@ export default {
           if (element.user_id == this.$store.state.user.id) {
             axios({
               method: "delete",
-              url: "herokuのURL/api/like",
+              url: "https://aqueous-tor-62904.herokuapp.com/api/like",
               data: {
                 share_id: this.shares[index].item.id,
                 user_id: this.$store.state.user.id,
@@ -69,7 +69,7 @@ export default {
         });
       } else {
         axios
-          .post("herokuのURL/api/like", {
+          .post("https://aqueous-tor-62904.herokuapp.com/api/like", {
             share_id: this.shares[index].item.id,
             user_id: this.$store.state.user.id,
           })
@@ -84,7 +84,10 @@ export default {
     },
     del(index) {
       axios
-        .delete("herokuのURL/api/shares/" + this.shares[index].item.id)
+        .delete(
+          "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
+            this.shares[index].item.id
+        )
         .then((response) => {
           console.log(response);
           this.$router.go({
@@ -95,10 +98,15 @@ export default {
     },
     async getShares() {
       let data = [];
-      const shares = await axios.get("herokuのURL/api/shares");
+      const shares = await axios.get(
+        "https://aqueous-tor-62904.herokuapp.com/api/shares/"
+      );
       for (let i = 0; i < shares.data.data.length; i++) {
         await axios
-          .get("herokuのURL/api/shares/" + shares.data.data[i].id)
+          .get(
+            "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
+              shares.data.data[i].id
+          )
           .then((response) => {
             if (this.$route.name == "profile") {
               if (response.data.item.user_id == this.$store.state.user.id) {
