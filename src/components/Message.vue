@@ -1,14 +1,11 @@
 <template>
   <div>
-    <!-- シェアを全て表示する -->
     <div v-for="(value, index) in shares" :key="index">
       <div class="message">
         <div class="flex">
           <p class="name">{{ value.name }}</p>
-          <!-- いいねボタン -->
           <img class="icon" src="../assets/heart.png" @click="fav(index)" alt />
           <p class="number">{{ value.like.length }}</p>
-          <!-- シェア削除 -->
           <img
             class="icon"
             src="../assets/cross.png"
@@ -16,7 +13,6 @@
             alt
             v-if="path && profile"
           />
-          <!-- シェア詳細画面 -->
           <img
             class="icon detail"
             src="../assets/detail.png"
@@ -49,18 +45,15 @@ export default {
   },
   methods: {
     fav(index) {
-      // 対象のシェアにいいねがついているか
       const result = this.shares[index].like.some((value) => {
         return value.user_id == this.$store.state.user.id;
       });
-      // 自分がすでにいいねしている場合
       if (result) {
-        // 自分がすでにいいねしている場合、自分のいいねを削除する
         this.shares[index].like.forEach((element) => {
           if (element.user_id == this.$store.state.user.id) {
             axios({
               method: "delete",
-              url: "https://aqueous-tor-62904.herokuapp.com/api/like",
+              url: "herokuのURL/api/like",
               data: {
                 share_id: this.shares[index].item.id,
                 user_id: this.$store.state.user.id,
@@ -74,10 +67,9 @@ export default {
             });
           }
         });
-        // 自分がすでにいいねしていない場合
       } else {
         axios
-          .post("https://aqueous-tor-62904.herokuapp.com/api/like", {
+          .post("herokuのURL/api/like", {
             share_id: this.shares[index].item.id,
             user_id: this.$store.state.user.id,
           })
@@ -90,13 +82,9 @@ export default {
           });
       }
     },
-    // シェア削除
     del(index) {
       axios
-        .delete(
-          "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
-            this.shares[index].item.id
-        )
+        .delete("herokuのURL/api/shares/" + this.shares[index].item.id)
         .then((response) => {
           console.log(response);
           this.$router.go({
@@ -105,18 +93,12 @@ export default {
           });
         });
     },
-    // 画面表示時のシェア表示
     async getShares() {
       let data = [];
-      const shares = await axios.get(
-        "https://aqueous-tor-62904.herokuapp.com/api/shares/"
-      );
+      const shares = await axios.get("herokuのURL/api/shares");
       for (let i = 0; i < shares.data.data.length; i++) {
         await axios
-          .get(
-            "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
-              shares.data.data[i].id
-          )
+          .get("herokuのURL/api/shares/" + shares.data.data[i].id)
           .then((response) => {
             if (this.$route.name == "profile") {
               if (response.data.item.user_id == this.$store.state.user.id) {
