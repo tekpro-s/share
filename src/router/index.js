@@ -18,21 +18,31 @@ const routes = [
     path: '/signup',
     name: 'signup',
     component: SignUp
-  },  {
+  },
+  {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/detail/:id",
     name: "detail",
     component: Detail,
+    meta: {
+      requiresAuth: true,
+    },
     props: true,
   },
   {
     path: "/profile",
     name: "profile",
     component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
   }
 ]
 
@@ -45,18 +55,18 @@ const router = new VueRouter({
 // 認証設定
 router.beforeEach((to, from, next) => {
   if (
-    to.matched((record) => record.meta.requiresAuth) && 
-      !store.state.auth
-    ) {
-      next({
-        path: "/",
-        query: {
-          redirect: to.fullPath.Path,
-        },
-      });
+    to.matched.some((record) => record.meta.requiresAuth) &&
+    !store.state.auth
+  ) {
+    next({
+      path: "/",
+      query: {
+        redirect: to.fullPath,
+      },
+    });
   } else {
     next();
   }
 });
 
-export default router
+export default router;

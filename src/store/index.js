@@ -59,10 +59,10 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-      })
-    }
-  },
-  changeUserData({ commit }, { profile }) {
-    commit("changeUserData", profile);
+        })
+    },
+    changeUserData({ commit }, { profile }) {
+      commit("changeUserData", profile);
+    },
   },
 })
