@@ -13,7 +13,7 @@ class SharesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // シェアを全部取得sルウ
+    // シェアを全部取得する
     public function index()
     {
         $items = Shre::all();
