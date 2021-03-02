@@ -34,7 +34,7 @@
         <!-- シェア投稿内容表示 -->
         <p class="text">{{ value.item.share }}</p>
         <!-- シェア投稿時間表示 -->
-        <p class="text time">{{ value.item.updated_at }}</p>
+        <p class="text time">{{ value.item.updated_at | moment }}</p>
       </div>
     </div>
   </div>
@@ -42,6 +42,7 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
 export default {
   // Messageコンポーネントに渡されたIDの値を受ける
   props: ["id"],
@@ -51,6 +52,12 @@ export default {
       path: true,
       profile: true,
     };
+  },
+  // 日付フィルタを設定
+  filters: {
+    moment: function (date) {
+      return moment(date).format("YYYY/MM/DD HH:mm:ss");
+    },
   },
   methods: {
     fav(index) {
