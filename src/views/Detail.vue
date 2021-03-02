@@ -21,6 +21,9 @@
           <div>
             <p class="text">{{ comment.comment.content }}</p>
           </div>
+          <div>
+            <p class="text time">{{ comment.comment.updated_at | moment }}</p>
+          </div>
         </div>
         <!-- シェアに対するコメント送信 -->
         <input v-model="content" type="text" />
@@ -44,6 +47,12 @@ export default {
       content: "",
       data: "",
     };
+  },
+  // 日付フィルタを設定
+  filters: {
+    moment: function (date) {
+      return moment(date).format("YYYY/MM/DD HH:mm:ss");
+    },
   },
   methods: {
     send() {
@@ -130,6 +139,9 @@ export default {
 }
 .text {
   margin-top: 10px;
+  font-size: 12px;
+}
+.time {
   font-size: 10px;
 }
 button {
