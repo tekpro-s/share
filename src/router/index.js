@@ -35,6 +35,7 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    // propsをtrueにすることでパラメータを次のページに渡す
     props: true,
   },
   {

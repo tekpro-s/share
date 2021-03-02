@@ -7,6 +7,7 @@
       <div class="title">
         <p>ホーム</p>
       </div>
+      <!-- Messageコンポーネントにidの値を渡す -->
       <Message :id="id" />
       <div class="comment">
         <div class="comment-title">
@@ -36,6 +37,7 @@ import SideNavi from "../components/SideNavi";
 import Message from "../components/Message";
 import axios from "axios";
 export default {
+  // pathの/:idから渡されたシェアidを受け取る
   props: ["id"],
   data() {
     return {
@@ -61,7 +63,7 @@ export default {
           });
         });
     },
-    //画面表示時にコメント表示
+    //詳細画面表示時にコメント表示
     comment() {
       axios
         .get("https://aqueous-tor-62904.herokuapp.com/api/shares/" + this.id)
