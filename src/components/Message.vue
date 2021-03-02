@@ -4,6 +4,7 @@
     <div v-for="(value, index) in shares" :key="index">
       <div class="message">
         <div class="flex">
+          <!-- シェア投稿ユーザの名前表示 -->
           <p class="name">{{ value.name }}</p>
           <!-- いいねボタン -->
           <img class="icon" src="../assets/heart.png" @click="fav(index)" alt />
@@ -30,7 +31,10 @@
             v-if="profile"
           />
         </div>
+        <!-- シェア投稿内容表示 -->
         <p class="text">{{ value.item.share }}</p>
+        <!-- シェア投稿時間表示 -->
+        <p class="text time">{{ value.item.updated_at }}</p>
       </div>
     </div>
   </div>
@@ -127,7 +131,7 @@ export default {
       //シェア表示
       for (let i = 0; i < shares.data.data.length; i++) {
         await axios
-          // idごとのユーザー情報を取得する
+          // シェアidごとシェア情報を取得する
           .get(
             "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
               shares.data.data[i].id
@@ -194,5 +198,8 @@ export default {
 .number {
   margin-left: 10px;
   margin-right: 10px;
+}
+.time {
+  font-size: 12px;
 }
 </style>
