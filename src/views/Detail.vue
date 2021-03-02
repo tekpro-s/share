@@ -39,6 +39,7 @@
 import SideNavi from "../components/SideNavi";
 import Message from "../components/Message";
 import axios from "axios";
+import moment from "moment";
 export default {
   // pathの/:idから渡されたシェアidを受け取る
   props: ["id"],
