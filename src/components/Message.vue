@@ -102,6 +102,9 @@ export default {
           )
           .then((response) => {
             console.log(response);
+            console.log(
+              this.shares[index].item.user_id + " " + this.$store.state.user.id
+            );
             alert(
               this.shares[index].item.user_id + " " + this.$store.state.user.id
             );
