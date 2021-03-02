@@ -95,9 +95,6 @@ export default {
     // シェア削除
     del(index) {
       if (this.shares[index].item.user_id != this.$store.state.user.id) {
-        alert(
-          this.shares[index].item.user_id + " " + this.$store.state.user.id
-        );
         axios
           .delete(
             "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
@@ -105,6 +102,9 @@ export default {
           )
           .then((response) => {
             console.log(response);
+            alert(
+              this.shares[index].item.user_id + " " + this.$store.state.user.id
+            );
             this.$router.go({
               path: this.$router.currentRoute.path,
               force: true,
