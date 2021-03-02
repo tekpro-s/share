@@ -94,7 +94,8 @@ export default {
     },
     // シェア削除
     del(index) {
-      if (this.shares[index].item.user_id != this.$store.state.user.id) {
+      // 自分のシェアだけ消せるようにする
+      if (this.shares[index].item.user_id == this.$store.state.user.id) {
         axios
           .delete(
             "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
@@ -105,9 +106,6 @@ export default {
             console.log(
               this.shares[index].item.user_id + " " + this.$store.state.user.id
             );
-            alert(
-              this.shares[index].item.user_id + " " + this.$store.state.user.id
-            );
             this.$router.go({
               path: this.$router.currentRoute.path,
               force: true,
@@ -115,6 +113,9 @@ export default {
           });
       } else {
         alert("自分のシェアではありません");
+        console.log(
+          this.shares[index].item.user_id + " " + this.$store.state.user.id
+        );
       }
     },
     // 画面表示時のシェア表示
