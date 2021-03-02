@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     fav(index) {
-      // 対象のシェアにいいねがついているか
+      // 対象のシェアにいいねがついているか判定
       const result = this.shares[index].like.some((value) => {
         return value.user_id == this.$store.state.user.id;
       });
@@ -94,18 +94,22 @@ export default {
     },
     // シェア削除
     del(index) {
-      axios
-        .delete(
-          "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
-            this.shares[index].item.id
-        )
-        .then((response) => {
-          console.log(response);
-          this.$router.go({
-            path: this.$router.currentRoute.path,
-            force: true,
+      if (this.shares[index].item.user_id != this.$store.state.user.id) {
+        axios
+          .delete(
+            "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
+              this.shares[index].item.id
+          )
+          .then((response) => {
+            console.log(response);
+            this.$router.go({
+              path: this.$router.currentRoute.path,
+              force: true,
+            });
           });
-        });
+      } else {
+        alert("自分のシェアではありません");
+      }
     },
     // 画面表示時のシェア表示
     async getShares() {
