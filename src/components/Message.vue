@@ -56,7 +56,7 @@ export default {
   // 日付フィルタを設定
   filters: {
     moment: function (date) {
-      return moment(date).format("YYYY/MM/DD HH:mm:ss");
+      return moment(date).format("YYYY/MM/DD HH:mm");
     },
   },
   methods: {
