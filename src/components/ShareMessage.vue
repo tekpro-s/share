@@ -21,6 +21,8 @@ export default {
     send() {
       if (this.share === "") {
         alert("シェアする内容を入力してください");
+      } else if (this.share > 191) {
+        alert("文字数が上限を超えています");
       } else {
         axios
           .post("https://aqueous-tor-62904.herokuapp.com/api/shares", {

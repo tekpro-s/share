@@ -8,6 +8,7 @@
           <p class="name">{{ value.name }}</p>
           <!-- いいねボタン -->
           <img class="icon" src="../assets/heart.png" @click="fav(index)" alt />
+          <!-- いいね数表示 -->
           <p class="number">{{ value.like.length }}</p>
           <!-- シェア削除 -->
           <img
@@ -195,6 +196,8 @@ export default {
   padding: 20px;
   border-bottom: solid 1px white;
   border-left: solid 1px white;
+  /* 文字数が長い場合に折り返し */
+  word-wrap: break-word;
 }
 .name {
   font-size: 18px;
