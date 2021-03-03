@@ -147,6 +147,8 @@ export default {
 .text {
   margin-top: 10px;
   font-size: 12px;
+  /* 文字数が長い場合に折り返し */
+  word-wrap: break-word;
 }
 .time {
   font-size: 10px;
