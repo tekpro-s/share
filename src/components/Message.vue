@@ -30,6 +30,7 @@
             alt
             v-if="profile"
           />
+          <p class="number">{{ value.comment.length }}</p>
         </div>
         <!-- シェア投稿内容表示 -->
         <p class="text">{{ value.item.share }}</p>
