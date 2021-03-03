@@ -57,21 +57,27 @@ export default {
   },
   methods: {
     send() {
-      axios
-        //シェアに対するコメント送信
-        .post("https://aqueous-tor-62904.herokuapp.com/api/comment", {
-          share_id: this.id,
-          user_id: this.$store.state.user.id,
-          content: this.content,
-        })
-        .then((response) => {
-          console.log(response);
-          this.content = "";
-          this.$router.go({
-            path: this.$router.currentRoute.path,
-            force: true,
+      //シェアに対するコメント送信
+      if (this.content === "") {
+        alert("コメントする内容を入力してください");
+      } else if (this.content.length > 191) {
+        alert("文字数が上限を超えています");
+      } else {
+        axios
+          .post("https://aqueous-tor-62904.herokuapp.com/api/comment", {
+            share_id: this.id,
+            user_id: this.$store.state.user.id,
+            content: this.content,
+          })
+          .then((response) => {
+            console.log(response);
+            this.content = "";
+            this.$router.go({
+              path: this.$router.currentRoute.path,
+              force: true,
+            });
           });
-        });
+      }
     },
     //詳細画面表示時にコメント表示
     comment() {
