@@ -21,7 +21,7 @@ export default {
     send() {
       if (this.share === "") {
         alert("シェアする内容を入力してください");
-      } else if (this.share > 191) {
+      } else if (this.share.length > 191) {
         alert("文字数が上限を超えています");
       } else {
         axios
