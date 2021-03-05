@@ -139,32 +139,31 @@ export default {
         "https://aqueous-tor-62904.herokuapp.com/api/shares"
       );
       //シェア表示
-      for (let i = 0; i < shares.data.data.length; i++) {
-        await axios
-          // シェアidごとシェア情報を取得する
-          .get(
-            "https://aqueous-tor-62904.herokuapp.com/api/shares/" +
-              shares.data.data[i].id
-          )
-          .then((response) => {
-            // プロフィール画面の場合
-            if (this.$route.name == "profile") {
-              // シェアのIDとログイン中のユーザIDが一致する場合、シェア情報表示
-              if (response.data.item.user_id == this.$store.state.user.id) {
+      await Promise.all(
+        shares.data.data.map((d) => {
+          axios
+            // シェアidごとシェア情報を取得する
+            .get("https://aqueous-tor-62904.herokuapp.com/api/shares/" + d.id)
+            .then((response) => {
+              // プロフィール画面の場合
+              if (this.$route.name == "profile") {
+                // シェアのIDとログイン中のユーザIDが一致する場合、シェア情報表示
+                if (response.data.item.user_id == this.$store.state.user.id) {
+                  data.push(response.data);
+                }
+                // 詳細画面の場合
+              } else if (this.$route.name == "detail") {
+                // シェアのIDと詳細画面のIDが一致する場合シェア情報表示
+                if (response.data.item.id == this.id) {
+                  data.push(response.data);
+                }
+                // プロフィール・詳細画面以外の場合全件表示
+              } else {
                 data.push(response.data);
               }
-              // 詳細画面の場合
-            } else if (this.$route.name == "detail") {
-              // シェアのIDと詳細画面のIDが一致する場合シェア情報表示
-              if (response.data.item.id == this.id) {
-                data.push(response.data);
-              }
-              // プロフィール・詳細画面以外の場合全県表示
-            } else {
-              data.push(response.data);
-            }
-          });
-      }
+            });
+        })
+      );
       this.shares = data;
       console.log(this.shares);
     },
